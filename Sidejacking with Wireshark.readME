@@ -1,0 +1,74 @@
+Sidejacking with Wireshark (Single Kali Machine)
+Quick Start
+bash
+# Start services
+sudo systemctl start apache2 mysql
+
+# Open DVWA
+firefox http://localhost/dvwa
+Step 1: Login to DVWA
+Go to: http://localhost/dvwa
+
+Login: admin / password
+
+Set Security Level to Low
+
+Step 2: Capture Cookie with Wireshark
+bash
+# Open Wireshark
+sudo wireshark
+In Wireshark:
+Select interface: lo (loopback)
+
+Start capture
+
+Filter: http and ip.addr == 127.0.0.1
+
+Refresh DVWA page in browser
+
+Look for Cookie: in packets
+
+Copy PHPSESSID value (e.g., abc123def456)
+
+Step 3: Hijack the Session
+Option A: Browser Method
+Open new private window: firefox --private-window http://localhost/dvwa
+
+Press F12 → Storage tab → Cookies
+
+Add cookie:
+
+Name: PHPSESSID
+
+Value: [your-copied-value]
+
+Domain: localhost
+
+Refresh page
+
+Option B: Command Line
+bash
+curl -b "PHPSESSID=abc123def456" http://localhost/dvwa/
+Step 4: Verify Success
+You should see "Welcome to Damn Vulnerable Web App!" without logging in
+
+Shows "Logged in as 'admin'"
+
+Troubleshooting
+bash
+# No packets? Check services
+sudo systemctl status apache2
+sudo systemctl status mysql
+
+# Test DVWA access
+curl -I http://localhost/dvwa/
+Security Fixes
+Use HTTPS instead of HTTP
+
+Set cookies with: HttpOnly;Secure;SameSite=Strict
+
+Short session timeouts
+
+Clean Up
+bash
+sudo systemctl stop apache2 mysql

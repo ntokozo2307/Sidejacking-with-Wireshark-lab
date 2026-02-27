@@ -34,8 +34,6 @@ Step 3: Hijack the Session
 Option A: Browser Method
 Open new private window: firefox --private-window http://localhost/dvwa
 
-Press F12 → Storage tab → Cookies
-
 Add cookie:
 
 Name: PHPSESSID
@@ -48,7 +46,7 @@ Refresh page
 
 Option B: Command Line
 bash
-curl -b "PHPSESSID=abc123def456" http://localhost/dvwa/
+curl -b "PHPSESSID=abc124def456" http://localhost/dvwa/
 Step 4: Verify Success
 You should see "Welcome to Damn Vulnerable Web App!" without logging in
 
@@ -71,4 +69,5 @@ Short session timeouts
 
 Clean Up
 bash
+
 sudo systemctl stop apache2 mysql
